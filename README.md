@@ -1,0 +1,1 @@
+Test to launch jenkins pipeline

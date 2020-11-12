@@ -22,7 +22,7 @@ RUN apt-get update \
   && pip3 install docker-py
 
 # Copy scripts
-COPY scripts/* /home/jenkins/scripts
+COPY scripts /home/jenkins/scripts
 
 # Standard SSH port
 EXPOSE 22

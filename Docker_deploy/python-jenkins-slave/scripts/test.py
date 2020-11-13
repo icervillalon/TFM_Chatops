@@ -1,12 +1,14 @@
 # Modify to Client instead of APIClient?
 from docker import APIClient
 
+import argparse
+
 '''
 Expected workflow:
 -> Get from GIT the dockerfile of the updated service + the HTML document of the page
--> Build the docker image
+-> Deletes older docker images if there are any
+-> Build the new docker image
 -> Run the container with the new image in one port or another, depending on the environment
--> Cleanup images after 
 '''
 # Generates a docker image from a provided dockerfile
 def build_image(client, dockerfile_path, deploy_env):
@@ -20,6 +22,7 @@ def build_image(client, dockerfile_path, deploy_env):
         print('DEBUG! Error found: ' + response[-1]['stream'])
         return 1
 
+# Creates and runs a docker container
 def run_container(client, deploy_env):
     # Determine the port for each environment
     if deploy_env == 'PRO':
@@ -36,8 +39,9 @@ def run_container(client, deploy_env):
         })
     )
     client.start(container=container.get('Id'))
-    return 0
+    return 0, exposed_port
 
+# Stops and removes a container
 def remove_previous_instance(client, deploy_env):
     running_container = _get_container_id(client,deploy_env)
     if running_container:
@@ -58,13 +62,41 @@ def _get_container_id(client, deploy_env):
         running_container = False
     return running_container
 
+# Parser for arguments at script launch
+def _argument_parser():
+    parser = argparse.ArgumentParser()
+    # Add long and short argument
+    parser.add_argument("--env", "-e", help="set deploy environment")
+    # Read arguments from the command line
+    args = parser.parse_args()
+    return args
+
+# Deletes the existing image of a container
+def delete_image(client, deploy_env):
+    if _get_container_id(client, deploy_env):
+        client.remove_image('httpd-server-{}'.format(deploy_env))
+    else:
+        remove_previous_instance(client,deploy_env)
+        client.remove_image('httpd-server-{}'.format(deploy_env))
+
 # TODO:
 # - Git integration to get the files? Check from Jenkins
 # - Return messages to get catched by Jenkins and RASA
 # -
 
 if __name__ == '__main__':
+    args = _argument_parser()
+    deploy_env = args.env
     cli = APIClient(base_url='unix://var/run/docker.sock')
+
+    # Cleanup older images
+    delete_image(cli, deploy_env)
+    # Build new images
+    build_image(cli, '/path/to/httpd_dockerfile', deploy_env)
+    # Create and run new container
+    result, exposed_port = run_container(cli, deploy_env)
+    print('Created container with the image httpd-server-{} at port {}'.format(deploy_env, str(exposed_port)))
+
 
 '''
 ## Testing code

@@ -43,13 +43,13 @@ def _get_image(client, deploy_env):
 # Generates a docker image from a provided dockerfile
 def build_image(client, dockerfile_path, deploy_env):
     response = [line for line in client.build(
-        path=dockerfile_path, rm = True, tag='httpd_server_{}'.format(deploy_env.upper())
+        path=dockerfile_path, rm = True, tag='httpd-server-{}'.format(deploy_env)
     )]
     # Format of last response line expected: {"stream":"Successfully built 032b8b2855fc\\n"}
-    if 'Succesfully' in response[-1]['stream']:
+    if 'Succesfully' in str(response[-1]):
         return 0
     else:
-        print('DEBUG! Error found: ' + response[-1]['stream'])
+        print('DEBUG! Error found: ' + str(response[-1]))
         return 1
 
 # Creates and runs a docker container
@@ -64,7 +64,7 @@ def run_container(client, deploy_env):
         raise ('Invalid deploy environment "{}". Execution aborted.'. format(deploy_env))
 
     container = client.create_container(
-        image='httpd_server_{}'.format(deploy_env.upper()),
+        image='httpd-server-{}'.format(deploy_env),
         detach=True,
         ports=[80],
         host_config=cli.create_host_config(port_bindings={

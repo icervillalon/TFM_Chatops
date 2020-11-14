@@ -31,8 +31,9 @@ RUN apt-get update \
 # Copy authorized keys
 COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
 
-# Copy scripts
+# Copy scripts and httpd_server basic settings
 COPY scripts /home/jenkins/scripts
+COPY httpd_server /home/jenkins/httpd_server
 
 RUN chown -R jenkins:jenkins /home/jenkins/.m2/ && \
     chown -R jenkins:jenkins /home/jenkins/.ssh/

@@ -1,5 +1,5 @@
 # Modify to Client instead of APIClient?
-from docker import APIClient
+from docker import Client
 
 import argparse
 
@@ -10,6 +10,36 @@ Expected workflow:
 -> Build the new docker image
 -> Run the container with the new image in one port or another, depending on the environment
 '''
+# Parser for arguments at script launch
+def _argument_parser():
+    parser = argparse.ArgumentParser()
+    # Add long and short argument
+    parser.add_argument("--env", "-e", help="set deploy environment")
+    # Read arguments from the command line
+    args = parser.parse_args()
+    return args
+
+# Returns the ID of a container if it's running. If it can't be find, return False
+def _get_container_id(client, deploy_env):
+    found_container = False
+    for container in client.containers():
+        if 'httpd-server-{}'.format(deploy_env) in container['Image']:
+            found_container = True
+            running_container = container['Id']
+    if not found_container:
+        running_container = False
+    return running_container
+
+# Returns true or false if the image for the given environment exists
+def _get_image(client, deploy_env):
+    image_name = 'httpd-server-{}'.format(deploy_env)
+    if image_name in client.images(quiet=True):
+        print(image_name + ' image found')
+        return True
+    else:
+        print(image_name + ' image not found')
+        return False
+
 # Generates a docker image from a provided dockerfile
 def build_image(client, dockerfile_path, deploy_env):
     response = [line for line in client.build(
@@ -24,11 +54,14 @@ def build_image(client, dockerfile_path, deploy_env):
 
 # Creates and runs a docker container
 def run_container(client, deploy_env):
+    deploy_env = deploy_env.lower()
     # Determine the port for each environment
-    if deploy_env == 'PRO':
+    if deploy_env == 'pro':
         exposed_port = 8088
-    elif deploy_env == 'PRE':
+    elif deploy_env == 'pre':
         exposed_port = 8089
+    else:
+        raise ('Invalid deploy environment "{}". Execution aborted.'. format(deploy_env))
 
     container = client.create_container(
         image='httpd_server_{}'.format(deploy_env.upper()),
@@ -51,33 +84,16 @@ def remove_previous_instance(client, deploy_env):
     else:
         raise Exception('Could not find the container httpd-server-{}. Execution aborted.'.format(deploy_env))
 
-# Returns the ID of a container if it's running. If it can't be find, return False
-def _get_container_id(client, deploy_env):
-    found_container = False
-    for container in client.containers():
-        if 'httpd-server-{}'.format(deploy_env) in container['Image']:
-            found_container = True
-            running_container = container['Id']
-    if not found_container:
-        running_container = False
-    return running_container
-
-# Parser for arguments at script launch
-def _argument_parser():
-    parser = argparse.ArgumentParser()
-    # Add long and short argument
-    parser.add_argument("--env", "-e", help="set deploy environment")
-    # Read arguments from the command line
-    args = parser.parse_args()
-    return args
-
 # Deletes the existing image of a container
 def delete_image(client, deploy_env):
-    if _get_container_id(client, deploy_env):
-        client.remove_image('httpd-server-{}'.format(deploy_env))
+    if _get_image(client, deploy_env):
+        if _get_container_id(client, deploy_env):
+            client.remove_image('httpd-server-{}'.format(deploy_env))
+        else:
+            remove_previous_instance(client,deploy_env)
+            client.remove_image('httpd-server-{}'.format(deploy_env))
     else:
-        remove_previous_instance(client,deploy_env)
-        client.remove_image('httpd-server-{}'.format(deploy_env))
+        print('Image "httpd-server-{}" not found'.format(deploy_env))
 
 # TODO:
 # - Git integration to get the files? Check from Jenkins
@@ -87,12 +103,12 @@ def delete_image(client, deploy_env):
 if __name__ == '__main__':
     args = _argument_parser()
     deploy_env = args.env
-    cli = APIClient(base_url='unix://var/run/docker.sock')
+    cli = Client(base_url='unix://var/run/docker.sock')
 
     # Cleanup older images
     delete_image(cli, deploy_env)
     # Build new images
-    build_image(cli, '/path/to/httpd_dockerfile', deploy_env)
+    build_image(cli, '/home/jenkins/httpd_server/{}'.format(deploy_env), deploy_env)
     # Create and run new container
     result, exposed_port = run_container(cli, deploy_env)
     print('Created container with the image httpd-server-{} at port {}'.format(deploy_env, str(exposed_port)))

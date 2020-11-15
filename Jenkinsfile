@@ -1,22 +1,15 @@
 pipeline {
-	agent any
+	agent {
+	    docker {
+	        image 'java-jenkins-slave:latest'
+	        args '-v /var/run/docker.sock:/var/run/docker.sock'
+	    }
+	}
 
 	stages {
-		stage ("build") {
-			steps {
-				echo "building"
-			}
-		}
-
 		stage ("test") {
 			steps {
-				echo "testing"
-			}
-		}
-
-		stage ("deploy") {
-			steps {
-				echo "deploying"
+				sh "python /home/jenkins/scripts/test.py -e pre"
 			}
 		}
 	}

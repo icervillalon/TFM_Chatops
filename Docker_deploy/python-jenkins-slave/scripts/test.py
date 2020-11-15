@@ -1,5 +1,6 @@
 # Modify to Client instead of APIClient?
 from docker import Client
+import json
 
 import argparse
 
@@ -21,19 +22,18 @@ def _argument_parser():
 
 # Returns the ID of a container if it's running. If it can't be find, return False
 def _get_container_id(client, deploy_env):
-    found_container = False
     for container in client.containers():
         if 'httpd-server-{}'.format(deploy_env) in container['Image']:
             found_container = True
             running_container = container['Id']
-    if not found_container:
-        running_container = False
+            return running_container
+    running_container = 'NONE'
     return running_container
 
 # Returns true or false if the image for the given environment exists
 def _get_image(client, deploy_env):
     image_name = 'httpd-server-{}'.format(deploy_env)
-    if image_name in client.images(quiet=True):
+    if image_name in str(json.dumps(client.images())):
         print(image_name + ' image found')
         return True
     else:
@@ -65,6 +65,7 @@ def run_container(client, deploy_env):
 
     container = client.create_container(
         image='httpd-server-{}'.format(deploy_env),
+        name='httpd-server-{}'.format(deploy_env),
         detach=True,
         ports=[80],
         host_config=cli.create_host_config(port_bindings={
@@ -77,12 +78,12 @@ def run_container(client, deploy_env):
 # Stops and removes a container
 def remove_previous_instance(client, deploy_env):
     running_container = _get_container_id(client,deploy_env)
-    if running_container:
+    if running_container != 'NONE':
         client.kill(running_container)
         client.remove_container(running_container)
         return 0
     else:
-        raise Exception('Could not find the container httpd-server-{}. Execution aborted.'.format(deploy_env))
+        print('No previous containers found.')
 
 # Deletes the existing image of a container
 def delete_image(client, deploy_env):
@@ -92,8 +93,10 @@ def delete_image(client, deploy_env):
         else:
             remove_previous_instance(client,deploy_env)
             client.remove_image('httpd-server-{}'.format(deploy_env))
+        return True
     else:
         print('Image "httpd-server-{}" not found'.format(deploy_env))
+        return False
 
 # TODO:
 # - Git integration to get the files? Check from Jenkins
@@ -107,6 +110,8 @@ if __name__ == '__main__':
 
     # Cleanup older images
     delete_image(cli, deploy_env)
+    # Remove previous container if the script removed a previous image
+    remove_previous_instance(cli, deploy_env)
     # Build new images
     build_image(cli, '/home/jenkins/httpd_server/{}'.format(deploy_env), deploy_env)
     # Create and run new container

@@ -140,7 +140,7 @@ if __name__ == '__main__':
         # Cleanup older images
         delete_image(cli)
         # Build new images
-        build_image(cli, '/home/jenkins/deployment_server')
+        build_image(cli, '/home/jenkins/development_server')
         # Create and run new container
         result, exposed_port = run_container(cli)
         print('Created container with the image development-server, exposing ssh at port {}'.format(str(exposed_port)))

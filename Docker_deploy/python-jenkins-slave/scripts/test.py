@@ -155,8 +155,7 @@ if __name__ == '__main__':
                                     '&& cd tfm-ignaciocervantes '
                                     '&& git checkout HEAD requirements.txt '
                                     '&& pip install -r requirements.txt '))
-        print('Successfully installed packages from ')
-
+        print('Successfully installed packages from GitLab')
     elif deploy_mode == 'install package':
         print(execute_commands(cli, 'pip install {}'.format(package)))
     elif deploy_mode == 'delete_package':

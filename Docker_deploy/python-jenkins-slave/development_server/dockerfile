@@ -1,6 +1,7 @@
 FROM ubuntu:18.04
 
-ENV TOKEN 
+ENV USER icervillalon
+ENV TOKEN FK8YN8QUkksGV6s2Sz69
 
 # Make sure the package repository is up to date.
 RUN apt-get update && \
@@ -12,21 +13,25 @@ RUN apt-get update && \
     mkdir -p /var/run/sshd && \
 # Cleanup old packages
     apt-get -qy autoremove && \
+# Add user developer to the image
+    adduser --quiet developer && \
+# Set password for the jenkins user (you may want to alter this).
+    echo "developer:developer" | chpasswd && \
+    mkdir /home/developer/.m2
 
 RUN apt-get update \
   && apt-get install -qy --force-yes python3-pip python3-dev \
   && cd /usr/local/bin \
   && ln -s /usr/bin/python3 python \
-  && pip3 install --upgrade pip \
+  && pip3 install --upgrade pip 
 
-#ADD settings.xml /home/jenkins/.m2/
+#ADD settings.xml /home/developer/.m2/
 # Copy authorized keys
-COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
+COPY .ssh /home/developer/.ssh
 
+#UNNEEDED?
 # Copy development machine deployment data
-COPY httpd_server /home/jenkins/httpd_server
-
-# Get from GIT 
+#COPY development_server /home/developer/development_server_files
 
 # Standard SSH port
 EXPOSE 22

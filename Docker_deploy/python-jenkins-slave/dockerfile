@@ -28,7 +28,7 @@ RUN apt-get update \
   && pip3 install docker-py
 
 #ADD settings.xml /home/jenkins/.m2/
-# Copy authorized keys
+# Copy ssh keys
 COPY .ssh /home/jenkins/.ssh
 
 # Copy scripts and development machine deployment data

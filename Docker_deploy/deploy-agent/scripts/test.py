@@ -18,6 +18,7 @@ def _argument_parser():
     parser = argparse.ArgumentParser()
     # Add long and short argument
     parser.add_argument("--mode", "-m", help="set deployment mode")
+    parser.add_argument("--package", "-p", help="package name")
     # Read arguments from the command line
     args = parser.parse_args()
     return args
@@ -26,7 +27,7 @@ def _argument_parser():
 # Returns the ID of a container if it's running. If it can't be find, return False
 def _get_container_id(client):
     for container in client.containers():
-        if 'depelopment-server' in container['Image']:
+        if 'development-server' in container['Image']:
             found_container = True
             running_container = container['Id']
             return running_container
@@ -59,8 +60,9 @@ def build_image(client, dockerfile_path):
     # Append the datetime of the last build
     # _append_datetime(deploy_env)
     # Build the image
+    print('Building image, this may take some time...')
     response = [line for line in client.build(
-        path=dockerfile_path, rm = True, tag='development-server'
+        path=dockerfile_path, rm=True, tag='development-server'
     )]
     # Format of last response line expected: {"stream":"Successfully built 032b8b2855fc\\n"}
     print('Dockerfile build result: ' + str(response[-1].decode('utf-8')))
@@ -76,7 +78,7 @@ def run_container(client):
         detach=True,
         ports=[22],
         host_config=cli.create_host_config(port_bindings={
-            80:exposed_port
+            22:exposed_port
         })
     )
     client.start(container=container.get('Id'))
@@ -113,7 +115,7 @@ def delete_image(client):
 # Execute commands towards the development server
 def execute_commands(client, command):
     # Get the ID of the container
-    container_id = _get_container_id()
+    container_id = _get_container_id(client)
     if container_id != 'NONE':
         # Create exec instance
         exec_id = client.exec_create(container_id, command)
@@ -148,19 +150,19 @@ if __name__ == '__main__':
         remove_previous_instance(cli)
         print('Removed development-server instance')
     elif deploy_mode == 'update_packages':
-        print(execute_commands(cli, "pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"))
+        print(execute_commands(cli, "pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U").decode('utf-8'))
     elif deploy_mode == 'get_from_git':
-        print(execute_commands(cli, 'cd /home/developer && '
-                                    'git clone -n http://$USER:$TOKEN@lab.gsi.upm.es/TFM/tfm-ignaciocervantes.git --depth 1 '
-                                    '&& cd tfm-ignaciocervantes '
-                                    '&& git checkout HEAD requirements.txt '
-                                    '&& pip install -r requirements.txt '))
+        print(execute_commands(cli, 'bash -c "cd /home/developer"')).decode('utf-8')
+        print(execute_commands(cli, 'git clone -n http://$GITUSER:$TOKEN@lab.gsi.upm.es/TFM/tfm-ignaciocervantes.git --depth 1')).decode('utf-8')
+        print(execute_commands(cli, 'bash -c "cd tfm-ignaciocervantes"')).decode('utf-8')
+        print(execute_commands(cli, 'git checkout HEAD requirements.txt')).decode('utf-8')
+        print(execute_commands(cli, 'pip install -r requirements.txt')).decode('utf-8')
         print('Successfully installed packages from GitLab')
-    elif deploy_mode == 'install package':
-        print(execute_commands(cli, 'pip install {}'.format(package)))
+    elif deploy_mode == 'install_package':
+        print(execute_commands(cli, 'pip install {}'.format(package)).decode('utf-8'))
     elif deploy_mode == 'delete_package':
-        print(execute_commands(cli, 'pip uninstall -y {}'.format(package)))
+        print(execute_commands(cli, 'pip uninstall -y {}'.format(package)).decode('utf-8'))
     elif deploy_mode == 'get_packages':
-        print(execute_commands(cli, 'pip freeze'))
+        print(execute_commands(cli, 'pip freeze').decode('utf-8'))
     else:
         print('Unsupported mode {}'.format(deploy_mode))

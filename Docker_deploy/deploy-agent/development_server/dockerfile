@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-ENV USER icervillalon
+ENV GITUSER icervillalon
 ENV TOKEN FK8YN8QUkksGV6s2Sz69
 
 # Make sure the package repository is up to date.

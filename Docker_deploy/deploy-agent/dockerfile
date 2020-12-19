@@ -4,6 +4,7 @@ FROM ubuntu:18.04
 RUN apt-get update && \
     apt-get -qy full-upgrade && \
     apt-get install -qy git && \
+    apt-get install -qy sudo && \
 # Install a basic SSH server
     apt-get install -qy openssh-server && \
     sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd && \
@@ -15,7 +16,7 @@ RUN apt-get update && \
 # Add user jenkins to the image
     adduser --quiet jenkins && \
 # Set password for the jenkins user (you may want to alter this).
-    echo "jenkins:jenkins" | chpasswd && \
+    echo "jenkins:jenkins" | chpasswd && adduser docker sudo\
     mkdir /home/jenkins/.m2
 
 # Install python
@@ -40,4 +41,5 @@ RUN chown -R jenkins:jenkins /home/jenkins/.m2/ && \
 # Standard SSH port
 EXPOSE 22
 
+USER jenkins
 CMD ["/usr/sbin/sshd", "-D"]

@@ -9,7 +9,7 @@ RUN apt-get update && \
     sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd && \
     mkdir -p /var/run/sshd && \
 # Install jdk-8 to configure as Jenkins build agent
-    apt-get install openjdk-8-jdk && \
+    apt-get install -qy openjdk-8-jdk && \
 # Cleanup old packages
     apt-get -qy autoremove && \
 # Add user jenkins to the image

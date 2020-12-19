@@ -1,10 +1,13 @@
 # Modify to Client instead of APIClient?
 from docker import Client
 import json
-from datetime import datetime
+import tarfile
+import os
 
 import argparse
 
+GITUSER = 'icervillalon'
+TOKEN = 'FK8YN8QUkksGV6s2Sz69'
 '''
 Expected workflow:
 -> Get from GIT the dockerfile of the updated service + the HTML document of the page
@@ -121,9 +124,28 @@ def execute_commands(client, command):
         exec_id = client.exec_create(container_id, command)
         # Launch exec
         command_result = client.exec_start(exec_id)
+        if type(command_result)==None.__class__:
+            command_result = '\n'
     else:
         command_result = 'Container not found. {} was not launched'.format(command)
     return command_result
+
+def send_file(client, source_file, dest_path):
+    # container object
+    container = client.containers.get("development-server")
+
+    os.chdir(os.path.dirname(source_file))
+    srcname = os.path.basename(source_file)
+    tar = tarfile.open(source_file + '.tar', mode='w')
+    try:
+        tar.add(srcname)
+    finally:
+        tar.close()
+
+    data = open(source_file + '.tar', 'rb').read()
+    container.put_archive(os.path.dirname(dest_path), data)
+    print('Added file ' + dest_path)
+
 
 # TODO:
 # - Git integration to get the files? Check from Jenkins
@@ -153,7 +175,7 @@ if __name__ == '__main__':
         print(execute_commands(cli, "pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U").decode('utf-8'))
     elif deploy_mode == 'get_from_git':
         print(execute_commands(cli, 'bash -c "cd /home/developer"')).decode('utf-8')
-        print(execute_commands(cli, 'git clone -n http://$GITUSER:$TOKEN@lab.gsi.upm.es/TFM/tfm-ignaciocervantes.git --depth 1')).decode('utf-8')
+        print(execute_commands(cli, 'git clone -n http://{}:{}@lab.gsi.upm.es/TFM/tfm-ignaciocervantes.git --depth 1'.format(GITUSER,TOKEN))).decode('utf-8')
         print(execute_commands(cli, 'bash -c "cd tfm-ignaciocervantes"')).decode('utf-8')
         print(execute_commands(cli, 'git checkout HEAD requirements.txt')).decode('utf-8')
         print(execute_commands(cli, 'pip install -r requirements.txt')).decode('utf-8')
@@ -164,5 +186,7 @@ if __name__ == '__main__':
         print(execute_commands(cli, 'pip uninstall -y {}'.format(package)).decode('utf-8'))
     elif deploy_mode == 'get_packages':
         print(execute_commands(cli, 'pip freeze').decode('utf-8'))
+    elif deploy_mode == 'copy_file':
+        send_file(cli, 'requirements.txt', 'requirements.txt')
     else:
         print('Unsupported mode {}'.format(deploy_mode))

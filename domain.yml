@@ -2,36 +2,39 @@ version: "2.0"
 
 intents:
   - greet
-  - goodbye
-  - affirm
-  - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
-  - hello_world
+  - who_are_you
+  - help_me
+  - server_state
+  - launch_server
+  - remove_server
+  - install_package
+  - delete_package
+  - list_package
+  - update_packages
+  - get_from_git
 
 actions:
-  - action_hello_world
+  - action_server_state
+  - action_launch_server
+  - action_remove_server
+  - action_install_package
+  - action_delete_package
+  - action_list_package
+  - action_update_packages
+  - action_get_from_git
+
+entities:
+  - package
 
 responses:
   utter_greet:
   - text: "Hey! How are you?"
 
-  utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
+  utter_who_are_you:
+  - text: "I am a ChatBot connected to a DevOps environment to help you manage it, which is called ChatOps! I'm part of a TFM defense developed by Ignacio Cervantes Villalón."
 
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great, carry on!"
-
-  utter_goodbye:
-  - text: "Bye"
-
-  utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
+  utter_help_me:
+  - text: "Ask me to perform operations on the environment in natural language and I will keep you informed about the results. For example, you can ask me for the server status, to install a PIP package, or to initialize the environment." 
 
 session_config:
   session_expiration_time: 60

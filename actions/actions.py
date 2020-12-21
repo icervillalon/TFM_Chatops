@@ -13,16 +13,125 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
 
-class ActionHelloWorld(Action):
+class ActionServerState(Action):
 
     def name(self) -> Text:
-        return "action_hello_world"
+        return "action_server_state"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         print('Accesed the action ' + self.name())
-        dispatcher.utter_message(text="Hello World!")
+        dispatcher.utter_message(text="Launched "+ self.name())
+
+        return []
+
+
+class ActionLaunchServer(Action):
+
+    def name(self) -> Text:
+        return "action_launch_server"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        print('Accesed the action ' + self.name())
+        dispatcher.utter_message(text="Launched "+ self.name())
+
+        return []
+
+
+class ActionRemoveServer(Action):
+
+    def name(self) -> Text:
+        return "action_remove_server"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        print('Accesed the action ' + self.name())
+        dispatcher.utter_message(text="Launched "+ self.name())
+
+        return []
+
+
+class ActionInstallPackage(Action):
+
+    def name(self) -> Text:
+        return "action_install_package"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        print(str(tracker.last_message['entities']))
+        package_name = next(tracker.get_latest_entity_values('package'), None)
+        print('Accesed the action ' + self.name())
+        dispatcher.utter_message(text="Launched "+ self.name() + " and caught entity " + package_name)
+
+        return []
+
+
+class ActionDeletePackage(Action):
+
+    def name(self) -> Text:
+        return "action_delete_package"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        print(str(tracker.last_message['entities']))
+        package_name = next(tracker.get_latest_entity_values('package'), None)
+        print('Accesed the action ' + self.name())
+        dispatcher.utter_message(text="Launched "+ self.name() + " and caught entity " + package_name)
+
+        return []
+
+
+class ActionListPackage(Action):
+
+    def name(self) -> Text:
+        return "action_list_package"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        print('Accesed the action ' + self.name())
+        dispatcher.utter_message(text="Launched "+ self.name())
+
+        return []
+
+
+class ActionUpdatePackages(Action):
+
+    def name(self) -> Text:
+        return "action_update_packages"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        print('Accesed the action ' + self.name())
+        dispatcher.utter_message(text="Launched "+ self.name())
+
+        return []
+
+
+class ActionGetFromGit(Action):
+
+    def name(self) -> Text:
+        return "action_get_from_git"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        print('Accesed the action ' + self.name())
+        dispatcher.utter_message(text="Launched "+ self.name())
 
         return []

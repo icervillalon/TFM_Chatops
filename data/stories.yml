@@ -2,34 +2,52 @@ version: "2.0"
 
 stories:
 
-- story: hello world path
+- story: who_are_you
   steps:
-  - intent: hello_world
-  - action: action_hello_world
+  - intent: who_are_you
+  - action: utter_who_are_you
 
-- story: happy path
+- story: help_me
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
+  - intent: help_me
+  - action: utter_help_me
 
-- story: sad path 1
+- story: server_state
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
+  - intent: server_state
+  - action: action_server_state
 
-- story: sad path 2
+- story: launch_server
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
-  - action: utter_goodbye
+  - intent: launch_server
+  - action: action_launch_server
+
+- story: remove_server
+  steps:
+  - intent: remove_server
+  - action: action_remove_server
+
+- story: install_package
+  steps:
+  - intent: install_package
+  - action: action_install_package
+
+- story: delete_package
+  steps:
+  - intent: delete_package
+  - action: action_delete_package
+
+- story: list_package
+  steps:
+  - intent: list_package
+  - action: action_list_package
+
+- story: update_packages
+  steps:
+  - intent: update_packages
+  - action: action_update_packages
+
+- story: get_from_git
+  steps:
+  - intent: get_from_git
+  - action: action_get_from_git

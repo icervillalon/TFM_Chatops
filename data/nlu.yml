@@ -17,83 +17,60 @@ nlu:
     - goodevening
     - good afternoon
 
-- intent: goodbye
+- intent: who_are_you
   examples: |
-    - good afternoon
-    - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
+    - who are you? 
+    - are you a robot?
 
-- intent: affirm
+- intent: help_me
   examples: |
-    - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
+    - what can you do?
+    - help 
+    - can you help me?
 
-- intent: deny
+- intent: server_state
   examples: |
-    - no
-    - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
+    - is the server up?
+    - server state
+    - show me the server state
 
-- intent: mood_great
+- intent: launch_server
   examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
+    - launch the server
+    - deploy the server
 
-- intent: mood_unhappy
+- intent: remove_server
   examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
+    - remove the instance
+    - erase the server
 
-- intent: bot_challenge
+- intent: install_package
   examples: |
-    - are you a bot?
-    - are you a human?
-    - am I talking to a bot?
-    - am I talking to a human?
+    - i want to install [numpy](package)
+    - install the package [test==1.0.0](package)
+    - install [testpy==0.2.0](package)
+    - can you install [paquete](package)
+    - install the package [pandas](package)
+    - install [scipy](package)
 
-- intent: hello_world
+- intent: delete_package
   examples: |
-    - world
-    - programming
-    - first program
+    - i want to remove [scipy](package)
+    - uninstall [cowsay](package)
+    - remove the package [pytest])package
+
+- intent: list_packages
+  examples: |
+    - show me the packages installed
+    - show me the package list_packages
+    - list the packages
+- intent: update_packages
+  examples: |
+    - update the packages
+    - upgrate the installed packages
+
+- intent: get_from_git
+  examples: |
+    - download the package list from get_from_git
+    - get from git the packages
 

@@ -67,7 +67,7 @@ class ActionInstallPackage(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        print(str(tracker.last_message['entities']))
+        print(str(tracker.latest_message['entities']))
         package_name = next(tracker.get_latest_entity_values('package'), None)
         print('Accesed the action ' + self.name())
         dispatcher.utter_message(text="Launched "+ self.name() + " and caught entity " + package_name)
@@ -84,7 +84,7 @@ class ActionDeletePackage(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        print(str(tracker.last_message['entities']))
+        print(str(tracker.latest_message['entities']))
         package_name = next(tracker.get_latest_entity_values('package'), None)
         print('Accesed the action ' + self.name())
         dispatcher.utter_message(text="Launched "+ self.name() + " and caught entity " + package_name)

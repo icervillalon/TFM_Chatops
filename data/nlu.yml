@@ -33,10 +33,14 @@ nlu:
     - is the server up?
     - server state
     - show me the server state
+    - check the server state
+    - can you check the server state?
 
 - intent: launch_server
   examples: |
     - launch the server
+    - can you launch the server?
+    - launch the development server
     - deploy the server
 
 - intent: remove_server
@@ -62,15 +66,18 @@ nlu:
 - intent: list_packages
   examples: |
     - show me the packages installed
-    - show me the package list_packages
+    - show me the packages
     - list the packages
+    - what packages are installed?
+
 - intent: update_packages
   examples: |
     - update the packages
-    - upgrate the installed packages
+    - upgrade the installed packages
 
 - intent: get_from_git
   examples: |
     - download the package list from get_from_git
     - get from git the packages
+    - obtain the packages from git
 

@@ -33,9 +33,11 @@ TFM based on a ChatOps integration with RASA chatbot, Jenkins and Docker.
 
 ### Rasa deployment
 * To train the model -> rasa train
-* To launch the chatbot with the stored model -> rasa run or rasa shell 
+* To launch the chatbot with the stored model -> rasa run (or rasa shell for testing purposes)
 
-It is mandatory to run an action server to perform custom actions logic. To do so, from the /actions folder, run "rasa run actions".
+It is mandatory to run an action server to perform custom actions logic. To do so, run "rasa run actions".
+
+To connect with Telegram, ngrok is used to proxy the petitions to the localhost. To launch ngrok, execute "path_to_ngrok http 5005". The given URL must be placed in "credentials.yml" file to be accesible from Telegram.
 
 ## Jenkins plugins needed:
 * Gitlab (used to integrate change detections in gsi Gitlab)

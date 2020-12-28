@@ -21,12 +21,18 @@ nlu:
   examples: |
     - who are you? 
     - are you a robot?
+    - who am I talking to?
+    - who are you
+    - what is this
 
 - intent: help_me
   examples: |
     - what can you do?
     - help 
     - can you help me?
+    - what can you do
+    - how do this works
+    - i need help
 
 - intent: server_state
   examples: |
@@ -42,11 +48,14 @@ nlu:
     - can you launch the server?
     - launch the development server
     - deploy the server
+    - can you deploy the server
 
 - intent: remove_server
   examples: |
     - remove the instance
     - erase the server
+    - delete the server instance
+    - erase the server instance
 
 - intent: install_package
   examples: |
@@ -59,9 +68,9 @@ nlu:
 
 - intent: delete_package
   examples: |
-    - i want to remove [scipy](package)
-    - uninstall [cowsay](package)
-    - remove the package [pytest])package
+    - i want to remove [scipy==2.1.0](package)
+    - uninstall [cowsay==0.1.2](package)
+    - remove the package [pytest==1.0.2](package)
 
 - intent: list_packages
   examples: |
@@ -69,6 +78,9 @@ nlu:
     - show me the packages
     - list the packages
     - what packages are installed?
+    - get me the packages installed
+    - what packages are installed
+    - can you list the installed packages
 
 - intent: update_packages
   examples: |
@@ -80,4 +92,6 @@ nlu:
     - download the package list from get_from_git
     - get from git the packages
     - obtain the packages from git
+    - download from git
+    - get the changes from git
 

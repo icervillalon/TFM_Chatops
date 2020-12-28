@@ -9,7 +9,7 @@ intents:
   - remove_server
   - install_package
   - delete_package
-  - list_package
+  - list_packages
   - update_packages
   - get_from_git
 

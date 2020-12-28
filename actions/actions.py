@@ -40,6 +40,30 @@ def _get_job_results(jenkins_server, job_name, job_number):
     console_output = jenkins_server.get_build_console_output(job_name, job_number)
     return console_output
 
+class ActionSendConfirmation(Action):
+
+    def name(self) -> Text:
+        return "action_send_confirmation"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        last_intent = tracker.latest_message['intent'].get('name')
+        print('Accesed the action ' + self.name())
+        if 'package' in last_intent:
+            package_name = next(tracker.get_latest_entity_values('package'), None)
+            dispatcher.utter_message(text="Intent detected: {}. Do you want to install {}".format(last_intent, package_name))
+        else:
+            dispatcher.utter_message(text="Intent detected: {}. Please confirm to to launch the automatism".format(last_intent))
+        dispatcher.utter_message(buttons = [
+            {"payload": "/affirm", "title": "Yes"},
+            {"payload": "/deny", "title": "No"},
+        ])
+
+        return []
+
+
 class ActionServerState(Action):
 
     def name(self) -> Text:

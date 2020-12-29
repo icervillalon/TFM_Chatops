@@ -72,7 +72,7 @@ nlu:
     - uninstall [cowsay==0.1.2](package)
     - remove the package [pytest==1.0.2](package)
 
-- intent: list_packages
+- intent: list_package
   examples: |
     - show me the packages installed
     - show me the packages

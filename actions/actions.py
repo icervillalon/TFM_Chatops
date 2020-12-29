@@ -35,7 +35,7 @@ def _get_current_execution_number(jenkins_server, job_name):
 
 def _get_job_results(jenkins_server, job_name, job_number):
     counter_var = 0
-    while job_number != jenkins_server.get_job_info(job_name)['lastBuild']['number']:
+    while job_number != jenkins_server.get_job_info(job_name)['lastCompletedBuild']['number']:
         # Prevent the log to be flooded
         if counter_var % 2 == 0:
             print('Waiting for Jenkins build, please wait...')
@@ -157,13 +157,13 @@ class action_list_package(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        dispatcher.utter_message(text="Launched "+ self.name())
         jenkins_server = _get_server_client()
         job_name = 'get_package_list'
         print('Accesed the action ' + self.name())
 
         current_job = _get_current_execution_number(jenkins_server, job_name)
         _launch_jenkins_job(job_name)
-        dispatcher.utter_message(text="Launched "+ self.name())
         job_console_results = _get_job_results(jenkins_server, job_name, current_job)
         dispatcher.utter_message(text="Execution finished! Console output:\n" + job_console_results)
 

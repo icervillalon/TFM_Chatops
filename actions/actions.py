@@ -20,12 +20,16 @@ def _get_server_client():
     server = jenkins.Jenkins('http://localhost:8080', username='admin', password='1234')
     return server
 
+def _launch_jenkins_job(job_name):
+    jenkins_instance = _get_server_client()
+    jenkins_instance.build_job(job_name)
+
 def _get_last_completed_job_info(jenkins_server, job_name):
     last_build_number = jenkins_server.get_job_info(job_name)['lastCompletedBuild']['number']
     get_build_console_output = jenkins_server.get_build_console_output(job_name, last_build_number)
     return get_build_console_output
 
-def _get_current_execution_result(jenkins_server, job_name):
+def _get_current_execution_number(jenkins_server, job_name):
     current_number_execution = jenkins_server.get_job_info(job_name)['nextBuildNumber']
     return current_number_execution
 
@@ -40,7 +44,7 @@ def _get_job_results(jenkins_server, job_name, job_number):
     console_output = jenkins_server.get_build_console_output(job_name, job_number)
     return console_output
 
-class ActionSendConfirmation(Action):
+class action_send_confirmation(Action):
 
     def name(self) -> Text:
         return "action_send_confirmation"
@@ -64,7 +68,7 @@ class ActionSendConfirmation(Action):
         return []
 
 
-class ActionServerState(Action):
+class action_server_state(Action):
 
     def name(self) -> Text:
         return "action_server_state"
@@ -79,7 +83,7 @@ class ActionServerState(Action):
         return []
 
 
-class ActionLaunchServer(Action):
+class action_launch_server(Action):
 
     def name(self) -> Text:
         return "action_launch_server"
@@ -95,7 +99,7 @@ class ActionLaunchServer(Action):
         return []
 
 
-class ActionRemoveServer(Action):
+class action_remove_server(Action):
 
     def name(self) -> Text:
         return "action_remove_server"
@@ -110,7 +114,7 @@ class ActionRemoveServer(Action):
         return []
 
 
-class ActionInstallPackage(Action):
+class action_install_package(Action):
 
     def name(self) -> Text:
         return "action_install_package"
@@ -127,7 +131,7 @@ class ActionInstallPackage(Action):
         return []
 
 
-class ActionDeletePackage(Action):
+class action_delete_package(Action):
 
     def name(self) -> Text:
         return "action_delete_package"
@@ -144,7 +148,7 @@ class ActionDeletePackage(Action):
         return []
 
 
-class ActionListPackage(Action):
+class action_list_package(Action):
 
     def name(self) -> Text:
         return "action_list_package"
@@ -153,13 +157,19 @@ class ActionListPackage(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        jenkins_server = _get_server_client()
+        job_name = 'get_package_list'
         print('Accesed the action ' + self.name())
+        current_job = _get_current_execution_number()
+        _launch_jenkins_job(job_name)
         dispatcher.utter_message(text="Launched "+ self.name())
+        job_console_results = _get_job_results(jenkins_server, job_name, current_job)
+        dispatcher.utter_message(text="Execution finished! Console output:\n" + job_console_results)
 
         return []
 
 
-class ActionUpdatePackages(Action):
+class action_update_package(Action):
 
     def name(self) -> Text:
         return "action_update_packages"
@@ -174,7 +184,7 @@ class ActionUpdatePackages(Action):
         return []
 
 
-class ActionGetFromGit(Action):
+class action_get_from_git(Action):
 
     def name(self) -> Text:
         return "action_get_from_git"

@@ -2,6 +2,11 @@ version: "2.0"
 
 stories:
 
+- story: greet
+  steps:
+  - intent: greet
+  - action: utter_greet
+
 - story: who_are_you
   steps:
   - intent: who_are_you
@@ -15,39 +20,47 @@ stories:
 - story: server_state
   steps:
   - intent: server_state
+  - action: action_inform_user
   - action: action_server_state
 
 - story: launch_server
   steps:
   - intent: launch_server
+  - action: action_inform_user
   - action: action_launch_server
 
 - story: remove_server
   steps:
   - intent: remove_server
+  - action: action_inform_user
   - action: action_remove_server
 
 - story: install_package
   steps:
   - intent: install_package
+  - action: action_inform_user
   - action: action_install_package
 
 - story: delete_package
   steps:
   - intent: delete_package
+  - action: action_inform_user
   - action: action_delete_package
 
 - story: list_package
   steps:
   - intent: list_package
+  - action: action_inform_user
   - action: action_list_package
 
 - story: update_packages
   steps:
   - intent: update_packages
+  - action: action_inform_user
   - action: action_update_packages
 
 - story: get_from_git
   steps:
   - intent: get_from_git
+  - action: action_inform_user
   - action: action_get_from_git

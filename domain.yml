@@ -14,6 +14,7 @@ intents:
   - get_from_git
 
 actions:
+  - action_inform_user
   - action_server_state
   - action_launch_server
   - action_remove_server
@@ -28,7 +29,7 @@ entities:
 
 responses:
   utter_greet:
-  - text: "Hey! How are you?"
+  - text: "Hey! How are you today?"
 
   utter_who_are_you:
   - text: "I am a ChatBot connected to a DevOps environment to help you manage it, which is called ChatOps! I'm part of a TFM defense developed by Ignacio Cervantes Villalón."

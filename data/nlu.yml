@@ -24,6 +24,9 @@ nlu:
     - who am I talking to?
     - who are you
     - what is this
+    - are you a bot?
+    - is this a bot?
+    - is this a chatbot?
 
 - intent: help_me
   examples: |
@@ -33,6 +36,10 @@ nlu:
     - what can you do
     - how do this works
     - i need help
+    - i need support
+    - i don't understand
+    - don't know what to do
+
 
 - intent: server_state
   examples: |
@@ -41,6 +48,12 @@ nlu:
     - show me the server state
     - check the server state
     - can you check the server state?
+    - inform about the server state
+    - is the server ok?
+    - check the server
+    - inform about the development server
+    - is the development server up?
+
 
 - intent: launch_server
   examples: |
@@ -49,6 +62,11 @@ nlu:
     - launch the development server
     - deploy the server
     - can you deploy the server
+    - initialize the server
+    - create the server
+    - build the server
+    - deploy the development server
+
 
 - intent: remove_server
   examples: |
@@ -56,21 +74,27 @@ nlu:
     - erase the server
     - delete the server instance
     - erase the server instance
+    - remove the server
+    - eliminate the server instance
+
 
 - intent: install_package
   examples: |
-    - i want to install [numpy](package)
+    - i want to install [numpy==2](package)
     - install the package [test==1.0.0](package)
     - install [testpy==0.2.0](package)
-    - can you install [paquete](package)
-    - install the package [pandas](package)
-    - install [scipy](package)
+    - can you install [paquete==2.0.1](package)
+    - install the package [pandas==3.0.2](package)
+    - install [scipy==3.5.1](package)
 
 - intent: delete_package
   examples: |
     - i want to remove [scipy==2.1.0](package)
     - uninstall [cowsay==0.1.2](package)
     - remove the package [pytest==1.0.2](package)
+    - uninstall the package [pip==2.0.1](package)
+    - remove [testpy==1.0.2](package)
+    - delete the package [sklearn==5.6.1](package)
 
 - intent: list_package
   examples: |
@@ -81,17 +105,25 @@ nlu:
     - get me the packages installed
     - what packages are installed
     - can you list the installed packages
+    - show me a list of the installed packages
+    - list the pip list
 
 - intent: update_packages
   examples: |
     - update the packages
     - upgrade the installed packages
+    - update the installed packages
+    - upgrade the packages
+    - install the most recent packages
+    - install the most recent version of the packages
 
 - intent: get_from_git
   examples: |
-    - download the package list from get_from_git
+    - download the package list from git
     - get from git the packages
     - obtain the packages from git
     - download from git
     - get the changes from git
-
+    - get the requirements from git
+    - get the data from git
+    - obtain the packages list from git

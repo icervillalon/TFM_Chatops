@@ -9,6 +9,7 @@
 
 
 import jenkins
+import re
 import time
 from typing import Any, Text, Dict, List
 
@@ -41,8 +42,18 @@ def _get_job_results(jenkins_server, job_name, job_number):
             print('Waiting for Jenkins build, please wait...')
         time.sleep(3)
         counter_var += 1
-    console_output = jenkins_server.get_build_console_output(job_name, job_number)
+    console_output_raw = jenkins_server.get_build_console_output(job_name, job_number)
+    console_output = _process_console_output(console_output_raw)
     return console_output
+
+def _process_console_output(console_output):
+    console_lines = console_output.split('\n')
+    while console_lines:
+        popped_line = console_lines.pop(0)
+        if re.search('\+ sudo python', str(popped_line)) is not None:
+            break
+    console_clean_output = '\n'.join(console_lines).replace('Finished: SUCCESS\n\n', '')
+    return console_clean_output
 
 class action_send_confirmation(Action):
 

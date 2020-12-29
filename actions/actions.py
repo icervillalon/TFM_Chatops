@@ -160,7 +160,8 @@ class action_list_package(Action):
         jenkins_server = _get_server_client()
         job_name = 'get_package_list'
         print('Accesed the action ' + self.name())
-        current_job = _get_current_execution_number()
+
+        current_job = _get_current_execution_number(jenkins_server, job_name)
         _launch_jenkins_job(job_name)
         dispatcher.utter_message(text="Launched "+ self.name())
         job_console_results = _get_job_results(jenkins_server, job_name, current_job)

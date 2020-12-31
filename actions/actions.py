@@ -137,10 +137,6 @@ class action_launch_server(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        jenkins_instance = _get_server_client()
-        jenkins_instance.build_job('deploy_server')
-        print('Accesed the action ' + self.name())
-        dispatcher.utter_message(text="Launched "+ self.name())
 
         dispatcher.utter_message(text="Launched "+ self.name())
         jenkins_server = _get_server_client()

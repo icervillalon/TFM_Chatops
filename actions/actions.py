@@ -83,6 +83,8 @@ class action_inform_user(Action):
             message = 'Updating the packages, this may take a while...'
         elif last_intent == 'get_from_git':
             message = 'Updating the packages from git, please stand by!'
+        else:
+            message = 'Unknown intent!'
         dispatcher.utter_message(text=message)
 
         return []
@@ -196,7 +198,6 @@ class action_delete_package(Action):
 
         parameters = {'PACKAGE': next(tracker.get_latest_entity_values('package'), None)}
         if parameters['PACKAGE'] is not None:
-            dispatcher.utter_message(text="Launched "+ self.name())
             jenkins_server = _get_server_client()
             job_name = 'install_package'
             print('Accesed the action ' + self.name() + ' with the entity ' + parameters['PACKAGE'])

@@ -30,6 +30,7 @@ entities:
 responses:
   utter_greet:
   - text: "Hey! How are you today?"
+  - text: "Hi! Let's get some work done today!"
 
   utter_who_are_you:
   - text: "I am a ChatBot connected to a DevOps environment to help you manage it, which is called ChatOps! I'm part of a TFM defense developed by Ignacio Cervantes Villalón."

@@ -38,12 +38,16 @@ stories:
 - story: install_package
   steps:
   - intent: install_package
+    entities:
+      - package: "scipy==1.0.0"
   - action: action_inform_user
   - action: action_install_package
 
 - story: delete_package
   steps:
   - intent: delete_package
+    entities:
+      - package: "cowsay"
   - action: action_inform_user
   - action: action_delete_package
 

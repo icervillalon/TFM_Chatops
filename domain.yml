@@ -2,6 +2,7 @@ version: "2.0"
 
 intents:
   - greet
+  - thank
   - who_are_you
   - help_me
   - server_state
@@ -37,6 +38,9 @@ responses:
 
   utter_help_me:
   - text: "Ask me to perform operations on the environment in natural language and I will keep you informed about the results. For example, you can ask me for the server status, to install a PIP package, or to initialize the environment." 
+
+  utter_welcome:
+    -text: "You are welcome!"
 
 session_config:
   session_expiration_time: 60

@@ -17,6 +17,15 @@ nlu:
     - goodevening
     - good afternoon
 
+- intent: thank
+  examples: |
+    - thanks!
+    - thank you
+    - ty!
+    - thank
+    - thankyou
+    - thank u
+
 - intent: who_are_you
   examples: |
     - who are you? 

@@ -76,9 +76,9 @@ class action_inform_user(Action):
         elif last_intent == 'install_package':
             message = 'Installing the requested package...'
         elif last_intent == 'delete_package':
-            message = 'Delenting the requested package...'
+            message = 'Deleting the requested package...'
         elif last_intent == 'list_package':
-            message = 'Listing the installed packages'
+            message = 'Listing the installed packages, please stand by...'
         elif last_intent == 'update_packages':
             message = 'Updating the packages, this may take a while...'
         elif last_intent == 'get_from_git':
@@ -142,6 +142,16 @@ class action_launch_server(Action):
         print('Accesed the action ' + self.name())
         dispatcher.utter_message(text="Launched "+ self.name())
 
+        dispatcher.utter_message(text="Launched "+ self.name())
+        jenkins_server = _get_server_client()
+        job_name = 'deploy_server'
+        print('Accesed the action ' + self.name())
+
+        current_job = _get_current_execution_number(jenkins_server, job_name)
+        _launch_jenkins_job(job_name)
+        job_console_results = _get_job_results(jenkins_server, job_name, current_job)
+        dispatcher.utter_message(text="Execution finished! Console output:\n" + job_console_results)
+
         return []
 
 
@@ -199,7 +209,7 @@ class action_delete_package(Action):
         parameters = {'PACKAGE': next(tracker.get_latest_entity_values('package'), None)}
         if parameters['PACKAGE'] is not None:
             jenkins_server = _get_server_client()
-            job_name = 'install_package'
+            job_name = 'delete_package'
             print('Accesed the action ' + self.name() + ' with the entity ' + parameters['PACKAGE'])
 
             current_job = _get_current_execution_number(jenkins_server, job_name)

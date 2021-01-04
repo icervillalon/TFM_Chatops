@@ -1,8 +1,5 @@
 FROM ubuntu:18.04
 
-ENV GITUSER icervillalon
-ENV TOKEN FK8YN8QUkksGV6s2Sz69
-
 # Make sure the package repository is up to date.
 RUN apt-get update && \
     apt-get -qy full-upgrade && \
@@ -28,10 +25,9 @@ RUN apt-get update \
 #ADD settings.xml /home/developer/.m2/
 # Copy authorized keys
 COPY .ssh /home/developer/.ssh
+# Copy bash script to get git changes
+COPY bash_git_clone.sh /home/developer/bash_git_clone.sh
 
-#UNNEEDED?
-# Copy development machine deployment data
-#COPY development_server /home/developer/development_server_files
 
 # Standard SSH port
 EXPOSE 22

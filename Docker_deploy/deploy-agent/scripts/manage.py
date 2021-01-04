@@ -139,7 +139,7 @@ if __name__ == '__main__':
     elif deploy_mode == 'update_packages':
         print(execute_commands(cli, "pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U").decode('utf-8'))
     elif deploy_mode == 'get_from_git':
-        print(execute_commands(cli, "sh bash_git_clone.sh"))
+        print(execute_commands(cli, "sh bash_git_clone.sh", workdir='/home/developer'))
         '''
         print(execute_commands(cli, 'bash -c "cd /home/developer"')).decode('utf-8')
         print(execute_commands(cli, 'git clone -n http://$GITUSER:$TOKEN@lab.gsi.upm.es/TFM/tfm-ignaciocervantes.git --depth 1')).decode('utf-8')

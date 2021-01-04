@@ -138,7 +138,6 @@ class action_launch_server(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        dispatcher.utter_message(text="Launched "+ self.name())
         jenkins_server = _get_server_client()
         job_name = 'deploy_server'
         print('Accesed the action ' + self.name())
@@ -177,7 +176,6 @@ class action_install_package(Action):
 
         parameters = {'PACKAGE': next(tracker.get_latest_entity_values('package'), None)}
         if parameters['PACKAGE'] is not None:
-            dispatcher.utter_message(text="Launched "+ self.name())
             jenkins_server = _get_server_client()
             job_name = 'install_package'
             print('Accesed the action ' + self.name() + ' with the entity ' + parameters['PACKAGE'])
@@ -227,7 +225,6 @@ class action_list_package(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        dispatcher.utter_message(text="Launched "+ self.name())
         jenkins_server = _get_server_client()
         job_name = 'get_package_list'
         print('Accesed the action ' + self.name())

@@ -41,6 +41,7 @@ responses:
 
   utter_welcome:
   - text: "You are welcome!"
+  - text: "No problem!"
 
 session_config:
   session_expiration_time: 60

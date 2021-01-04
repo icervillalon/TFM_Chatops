@@ -1,23 +1,15 @@
 # Modify to Client instead of APIClient?
 from docker import Client
 import json
-from datetime import datetime
-
 import argparse
 
-'''
-Expected workflow:
--> Get from GIT the dockerfile of the updated service + the HTML document of the page
--> Deletes older docker images if there are any
--> Build the new docker image
--> Run the container with the new image in one port or another, depending on the environment
-'''
-DEPLOY_MODES = ['init', 'remove_server', 'update_packages', 'get_from_git', 'install_package', 'delete_package', 'get_packages']
+
+DEPLOY_MODES = ['status', 'init', 'remove_server', 'update_packages', 'get_from_git', 'install_package', 'delete_package', 'get_packages']
 # Parser for arguments at script launch
 def _argument_parser():
     parser = argparse.ArgumentParser()
     # Add long and short argument
-    parser.add_argument("--mode", "-m", help="set deployment mode")
+    parser.add_argument("--mode", "-m", help="set command mode")
     parser.add_argument("--package", "-p", help="package name")
     # Read arguments from the command line
     args = parser.parse_args()
@@ -43,17 +35,6 @@ def _get_image(client):
     else:
         print(image_name + ' image not found')
         return False
-
-'''
-# Function to append datetime to html page after building
-def _append_datetime(deploy_env):
-    f = open('/home/jenkins/httpd_server/{}/public-html/index.html'.format(deploy_env), 'a+')
-    f.write('Image build time: ' + str(datetime.now()))
-    f.close()
-    # Debug print file content
-    f_r = open('/home/jenkins/httpd_server/{}/public-html/index.html'.format(deploy_env), 'r').read()
-    print('Index content: ' + f_r)
-'''
 
 # Generates a docker image from a provided dockerfile
 def build_image(client, dockerfile_path):
@@ -113,12 +94,15 @@ def delete_image(client):
         return False
 
 # Execute commands towards the development server
-def execute_commands(client, command):
+def execute_commands(client, command, workdir=''):
     # Get the ID of the container
     container_id = _get_container_id(client)
     if container_id != 'NONE':
-        # Create exec instance
-        exec_id = client.exec_create(container_id, command)
+        # Create exec instance with a directory if it is passed.
+        if workdir:
+            exec_id = client.exec_create(container_id, command, workdir=workdir)
+        else:
+            exec_id = client.exec_create(container_id, command)
         # Launch exec
         command_result = client.exec_start(exec_id)
     else:
@@ -127,8 +111,6 @@ def execute_commands(client, command):
 
 # TODO:
 # - Git integration to get the files? Check from Jenkins
-# - Return messages to get catched by Jenkins and RASA
-# -
 
 if __name__ == '__main__':
     cli = Client(base_url='unix://var/run/docker.sock')
@@ -138,6 +120,11 @@ if __name__ == '__main__':
     if deploy_mode == 'install_package' or deploy_mode == 'delete_package':
         package = args.package
 
+    if deploy_mode == 'status':
+        if _get_container_id(cli) != 'NONE':
+            print('Development server is running!')
+        else:
+            print('Development server is not currently running.')
     if deploy_mode == 'init':
         # Cleanup older images
         delete_image(cli)
@@ -152,11 +139,14 @@ if __name__ == '__main__':
     elif deploy_mode == 'update_packages':
         print(execute_commands(cli, "pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U").decode('utf-8'))
     elif deploy_mode == 'get_from_git':
+        print(execute_commands(cli, "sh bash_git_clone.sh"))
+        '''
         print(execute_commands(cli, 'bash -c "cd /home/developer"')).decode('utf-8')
         print(execute_commands(cli, 'git clone -n http://$GITUSER:$TOKEN@lab.gsi.upm.es/TFM/tfm-ignaciocervantes.git --depth 1')).decode('utf-8')
         print(execute_commands(cli, 'bash -c "cd tfm-ignaciocervantes"')).decode('utf-8')
         print(execute_commands(cli, 'git checkout HEAD requirements.txt')).decode('utf-8')
         print(execute_commands(cli, 'pip install -r requirements.txt')).decode('utf-8')
+        '''
         print('Successfully installed packages from GitLab')
     elif deploy_mode == 'install_package':
         print(execute_commands(cli, 'pip install {}'.format(package)).decode('utf-8'))

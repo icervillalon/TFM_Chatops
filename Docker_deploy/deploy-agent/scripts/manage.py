@@ -3,8 +3,6 @@ from docker import Client
 import json
 import argparse
 
-
-DEPLOY_MODES = ['status', 'init', 'remove_server', 'update_packages', 'get_from_git', 'install_package', 'delete_package', 'get_packages']
 # Parser for arguments at script launch
 def _argument_parser():
     parser = argparse.ArgumentParser()
@@ -109,9 +107,6 @@ def execute_commands(client, command, workdir=''):
         command_result = 'Container not found. {} was not launched'.format(command)
     return command_result
 
-# TODO:
-# - Git integration to get the files? Check from Jenkins
-
 if __name__ == '__main__':
     cli = Client(base_url='unix://var/run/docker.sock')
     # Argument parsing
@@ -126,7 +121,7 @@ if __name__ == '__main__':
         else:
             print('Development server is not currently running.')
     if deploy_mode == 'init':
-        # Cleanup older images
+        # Clean up older images
         delete_image(cli)
         # Build new images
         build_image(cli, '/home/jenkins/development_server')
@@ -140,13 +135,6 @@ if __name__ == '__main__':
         print(execute_commands(cli, "pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U").decode('utf-8'))
     elif deploy_mode == 'get_from_git':
         print(execute_commands(cli, "sh bash_git_clone.sh", workdir='/home/developer'))
-        '''
-        print(execute_commands(cli, 'bash -c "cd /home/developer"')).decode('utf-8')
-        print(execute_commands(cli, 'git clone -n http://$GITUSER:$TOKEN@lab.gsi.upm.es/TFM/tfm-ignaciocervantes.git --depth 1')).decode('utf-8')
-        print(execute_commands(cli, 'bash -c "cd tfm-ignaciocervantes"')).decode('utf-8')
-        print(execute_commands(cli, 'git checkout HEAD requirements.txt')).decode('utf-8')
-        print(execute_commands(cli, 'pip install -r requirements.txt')).decode('utf-8')
-        '''
         print('Successfully installed packages from GitLab')
     elif deploy_mode == 'install_package':
         print(execute_commands(cli, 'pip install {}'.format(package)).decode('utf-8'))

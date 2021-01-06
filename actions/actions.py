@@ -143,6 +143,12 @@ class action_launch_server(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        jenkins_instance = _get_server_client()
+        jenkins_instance.build_job('deploy_server')
+        print('Accesed the action ' + self.name())
+        dispatcher.utter_message(text="Launched "+ self.name())
+
+        '''
         jenkins_server = _get_server_client()
         job_name = 'deploy_server'
         print('Accesed the action ' + self.name())
@@ -151,7 +157,7 @@ class action_launch_server(Action):
         _launch_jenkins_job(job_name)
         job_console_results = _get_job_results(jenkins_server, job_name, current_job)
         dispatcher.utter_message(text="Execution finished! Console output:\n" + job_console_results)
-
+        '''
         return []
 
 
@@ -237,7 +243,7 @@ class action_list_package(Action):
         current_job = _get_current_execution_number(jenkins_server, job_name)
         _launch_jenkins_job(job_name)
         job_console_results = _get_job_results(jenkins_server, job_name, current_job)
-        dispatcher.utter_message(text="Execution finished! Console output:\n" + job_console_results)
+        dispatcher.utter_message(text="Packages installed:\n" + job_console_results)
 
         return []
 

@@ -39,12 +39,12 @@ def build_image(client, dockerfile_path):
     # Append the datetime of the last build
     # _append_datetime(deploy_env)
     # Build the image
-    print('Building image, this may take some time...')
+    print('Building image...')
     response = [line for line in client.build(
         path=dockerfile_path, rm=True, tag='development-server'
     )]
     # Format of last response line expected: {"stream":"Successfully built 032b8b2855fc\\n"}
-    print('Dockerfile build result: ' + str(response[-1].decode('utf-8')))
+    # print('Dockerfile build result: ' + str(response[-1].decode('utf-8')))
 
 # Creates and runs a docker container
 def run_container(client):
@@ -67,7 +67,7 @@ def run_container(client):
 def remove_previous_instance(client):
     running_container = _get_container_id(client)
     if running_container != 'NONE':
-        print('Killing local container')
+        print('Killing previous "developer-server" container')
         client.kill(running_container)
         print('Removing container')
         client.remove_container(running_container)
@@ -128,7 +128,7 @@ if __name__ == '__main__':
         build_image(cli, '/home/jenkins/development_server')
         # Create and run new container
         result, exposed_port = run_container(cli)
-        print('Created container with the image development-server, exposing ssh at port {}'.format(str(exposed_port)))
+        print('Created container with the image "development-server", exposing ssh at port {}'.format(str(exposed_port)))
     elif deploy_mode == 'remove_server':
         remove_previous_instance(cli)
         print('Removed development-server instance')

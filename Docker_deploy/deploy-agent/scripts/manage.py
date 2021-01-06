@@ -120,7 +120,7 @@ if __name__ == '__main__':
             print('Development server is running!')
         else:
             print('Development server is not currently running.')
-    if deploy_mode == 'init':
+    elif deploy_mode == 'init':
         # Clean up older images
         delete_image(cli)
         # Build new images

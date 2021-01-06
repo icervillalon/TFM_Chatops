@@ -122,9 +122,14 @@ class action_server_state(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
+        jenkins_server = _get_server_client()
+        job_name = 'check_server_status'
         print('Accesed the action ' + self.name())
-        dispatcher.utter_message(text="Launched "+ self.name())
+
+        current_job = _get_current_execution_number(jenkins_server, job_name)
+        _launch_jenkins_job(job_name)
+        job_console_results = _get_job_results(jenkins_server, job_name, current_job)
+        dispatcher.utter_message(job_console_results)
 
         return []
 

@@ -122,7 +122,8 @@ if __name__ == '__main__':
             print('Development server is not currently running.')
     elif deploy_mode == 'init':
         # Clean up older images
-        delete_image(cli)
+        #delete_image(cli)
+        remove_previous_instance(cli)
         # Build new images
         build_image(cli, '/home/jenkins/development_server')
         # Create and run new container

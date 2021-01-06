@@ -1,48 +1,41 @@
-version: "2.0"
-
-intents:
-  - greet
-  - thank
-  - who_are_you
-  - help_me
-  - server_state
-  - launch_server
-  - remove_server
-  - install_package
-  - delete_package
-  - list_package
-  - update_packages
-  - get_from_git
-
-actions:
-  - action_inform_user
-  - action_server_state
-  - action_launch_server
-  - action_remove_server
-  - action_install_package
-  - action_delete_package
-  - action_list_package
-  - action_update_packages
-  - action_get_from_git
-
-entities:
-  - package
-
-responses:
-  utter_greet:
-  - text: "Hey! How are you today?"
-  - text: "Hi! Let's get some work done today!"
-
-  utter_who_are_you:
-  - text: "I am a ChatBot connected to a DevOps environment to help you manage it, which is called ChatOps! I'm part of a TFM defense developed by Ignacio Cervantes Villalón."
-
-  utter_help_me:
-  - text: "Ask me to perform operations on the environment in natural language and I will keep you informed about the results. For example, you can ask me for the server status, to install a PIP package, or to initialize the environment." 
-
-  utter_welcome:
-  - text: "You are welcome!"
-  - text: "No problem!"
-
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
+intents:
+- delete_package
+- install_package
+- list_package
+- greet
+- launch_server
+- thank
+- who_are_you
+- help_me
+- server_state
+- remove_server
+- update_packages
+- get_from_git
+entities:
+- package
+responses:
+  utter_greet:
+  - text: Hey! How are you today?
+  - text: Hi! Let's get some work done today!
+  utter_who_are_you:
+  - text: I am a ChatBot connected to a DevOps environment to help you manage it, which is called ChatOps! I'm part of a TFM defense developed by Ignacio Cervantes Villalón.
+  utter_help_me:
+  - text: Ask me to perform operations on the environment in natural language and I will keep you informed about the results. For example, you can ask me for the server status, to install a PIP package, or to initialize the environment.
+  utter_welcome:
+  - text: You are welcome!
+  - text: No problem!
+actions:
+- action_delete_package
+- action_get_from_git
+- action_inform_user
+- action_install_package
+- action_launch_server
+- action_list_package
+- action_remove_server
+- action_server_state
+- action_update_packages
+- utter_greet
+version: '2.0'

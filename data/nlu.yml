@@ -1,5 +1,4 @@
 version: "2.0"
-
 nlu:
 - intent: greet
   examples: |
@@ -16,7 +15,7 @@ nlu:
     - goodmorning
     - goodevening
     - good afternoon
-
+    - hi!
 - intent: thank
   examples: |
     - thanks!
@@ -25,10 +24,9 @@ nlu:
     - thank
     - thankyou
     - thank u
-
 - intent: who_are_you
   examples: |
-    - who are you? 
+    - who are you?
     - are you a robot?
     - who am I talking to?
     - who are you
@@ -36,11 +34,10 @@ nlu:
     - are you a bot?
     - is this a bot?
     - is this a chatbot?
-
 - intent: help_me
   examples: |
     - what can you do?
-    - help 
+    - help
     - can you help me?
     - what can you do
     - how do this works
@@ -48,8 +45,6 @@ nlu:
     - i need support
     - i don't understand
     - don't know what to do
-
-
 - intent: server_state
   examples: |
     - is the server up?
@@ -62,8 +57,6 @@ nlu:
     - check the server
     - inform about the development server
     - is the development server up?
-
-
 - intent: launch_server
   examples: |
     - launch the server
@@ -75,8 +68,7 @@ nlu:
     - create the server
     - build the server
     - deploy the development server
-
-
+    - launch the developer server
 - intent: remove_server
   examples: |
     - remove the instance
@@ -85,8 +77,6 @@ nlu:
     - erase the server instance
     - remove the server
     - eliminate the server instance
-
-
 - intent: install_package
   examples: |
     - i want to install [numpy==2](package)
@@ -95,7 +85,10 @@ nlu:
     - can you install [paquete==2.0.1](package)
     - install the package [pandas==3.0.2](package)
     - install [scipy==3.5.1](package)
-
+    - install the package [cowsay](package)
+    - install [standalone](package)
+    - install [pytest](package)
+    - install the package [scipy==1.0.0](package)
 - intent: delete_package
   examples: |
     - i want to remove [scipy==2.1.0](package)
@@ -104,7 +97,8 @@ nlu:
     - uninstall the package [pip==2.0.1](package)
     - remove [testpy==1.0.2](package)
     - delete the package [sklearn==5.6.1](package)
-
+    - uninstall [cowsay](package)
+    - remove [scipy](package)
 - intent: list_package
   examples: |
     - show me the packages installed
@@ -116,7 +110,6 @@ nlu:
     - can you list the installed packages
     - show me a list of the installed packages
     - list the pip list
-
 - intent: update_packages
   examples: |
     - update the packages
@@ -125,7 +118,6 @@ nlu:
     - upgrade the packages
     - install the most recent packages
     - install the most recent version of the packages
-
 - intent: get_from_git
   examples: |
     - download the package list from git

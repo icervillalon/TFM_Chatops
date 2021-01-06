@@ -68,3 +68,43 @@ stories:
   - intent: get_from_git
   - action: action_inform_user
   - action: action_get_from_git
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: install_package
+    entities:
+    - package: cowsay
+  - action: action_inform_user
+  - action: action_install_package
+  - intent: install_package
+    entities:
+    - package: standalone
+  - action: action_inform_user
+  - action: action_install_package
+  - intent: install_package
+    entities:
+    - package: pytest
+  - action: action_inform_user
+  - action: action_install_package
+  - intent: install_package
+    entities:
+    - package: scipy==1.0.0
+  - action: action_inform_user
+  - action: action_install_package
+  - intent: list_package
+  - action: action_inform_user
+  - action: action_list_package
+  - intent: delete_package
+    entities:
+    - package: cowsay
+  - action: action_inform_user
+  - action: action_delete_package
+  - intent: delete_package
+    entities:
+    - package: scipy
+  - action: action_inform_user
+  - action: action_delete_package
+  - intent: launch_server
+  - action: action_inform_user
+  - action: action_launch_server

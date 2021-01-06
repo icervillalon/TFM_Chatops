@@ -42,7 +42,8 @@ def _get_job_results(jenkins_server, job_name, job_number):
     while job_number != jenkins_server.get_job_info(job_name)['lastCompletedBuild']['number']:
         # Prevent the log to be flooded
         if counter_var % 2 == 0:
-            print('Waiting for Jenkins build, please wait...')
+            print('DEBUG! Seconds elapsed: ' + str(counter_var*5))
+            #print('Waiting for Jenkins build, please wait...')
         time.sleep(3)
         counter_var += 1
     console_output_raw = jenkins_server.get_build_console_output(job_name, job_number)

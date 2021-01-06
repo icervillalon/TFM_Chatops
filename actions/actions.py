@@ -55,7 +55,7 @@ def _process_console_output(console_output):
         popped_line = console_lines.pop(0)
         if re.search('\+ sudo python', str(popped_line)) is not None:
             break
-    console_clean_output = '\n'.join(console_lines).replace('\n\nFinished: SUCCESS\n\n', '')
+    console_clean_output = '\n'.join(console_lines).replace('Finished: SUCCESS', '').rstrip()
     return console_clean_output
 
 class action_inform_user(Action):

@@ -123,7 +123,7 @@ class action_server_state(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         jenkins_server = _get_server_client()
-        job_name = 'check_server_status'
+        job_name = 'check_server_state'
         print('Accesed the action ' + self.name())
 
         current_job = _get_current_execution_number(jenkins_server, job_name)

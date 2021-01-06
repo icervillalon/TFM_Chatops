@@ -40,12 +40,10 @@ def _get_current_execution_number(jenkins_server, job_name):
 def _get_job_results(jenkins_server, job_name, job_number):
     counter_var = 0
     while job_number != jenkins_server.get_job_info(job_name)['lastCompletedBuild']['number']:
-        # Prevent the log to be flooded
-        if counter_var % 2 == 0:
-            print('DEBUG! Seconds elapsed: ' + str(counter_var*5))
-            #print('Waiting for Jenkins build, please wait...')
-        time.sleep(3)
+        time.sleep(1)
+        # Count the seconds elapsed per action
         counter_var += 1
+    print('Finished action. Time elapsed: ' + str(counter_var))
     console_output_raw = jenkins_server.get_build_console_output(job_name, job_number)
     console_output = _process_console_output(console_output_raw)
     return console_output

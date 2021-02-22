@@ -1,26 +1,16 @@
-import pytest
-from simple_test import Wallet, InsufficientAmount
+class InsufficientAmount(Exception):
+    pass
 
 
-def test_default_initial_config():
-    wallet = Wallet()
-    assert wallet.balance == 0
+class Wallet(object):
 
-def test_setting_initial_config():
-    wallet = Wallet(100)
-    assert wallet.balance == 100
+    def __init__(self, initial_amount=0):
+        self.balance = initial_amount
 
-def test_add_file():
-    wallet = Wallet(10)
-    wallet.add_cash(90)
-    assert wallet.balance == 100
+    def spend_cash(self, amount):
+        if self.balance < amount:
+            raise InsufficientAmount('Not enough available to spend {}'.format(amount))
+        self.balance -= amount
 
-def test_remove_file():
-    wallet = Wallet(20)
-    wallet.spend_cash(10)
-    assert wallet.balance == 10
-
-def test_remove_file_raises_exception_on_insufficient_amount():
-    wallet = Wallet()
-    with pytest.raises(InsufficientAmount):
-        wallet.spend_cash(100)
+    def add_cash(self, amount):
+        self.balance += amount

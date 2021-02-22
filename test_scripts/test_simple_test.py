@@ -1,0 +1,26 @@
+import pytest
+from simple_test import Wallet, InsufficientAmount
+
+
+def test_default_initial_config():
+    wallet = Wallet()
+    assert wallet.balance == 0
+
+def test_setting_initial_config():
+    wallet = Wallet(100)
+    assert wallet.balance == 100
+
+def test_add_file():
+    wallet = Wallet(10)
+    wallet.add_cash(90)
+    assert wallet.balance == 100
+
+def test_remove_file():
+    wallet = Wallet(20)
+    wallet.spend_cash(10)
+    assert wallet.balance == 10
+
+def test_remove_file_raises_exception_on_insufficient_amount():
+    wallet = Wallet()
+    with pytest.raises(InsufficientAmount):
+        wallet.spend_cash(100)
